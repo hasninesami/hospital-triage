@@ -1,8 +1,3 @@
-/*
- * Hospital Patient Management & Emergency Triage System
- * Data Structures: Max-Heap, Queue, Linked List
- * Instructor: Dr. Nafis Sadeq | CSE Department
- */
 
 #include <iostream>
 #include <string>
@@ -16,14 +11,12 @@ using namespace std;
 #define YELLOW  "\033[93m"
 #define CYAN    "\033[96m"
 #define BOLD    "\033[1m"
-
 // ---------- Linked List: Treatment Record ----------
 struct Record {
     string note;
     Record* next;
     Record(string n) : note(n), next(nullptr) {}
 };
-
 // ---------- Patient ----------
 struct Patient {
     int id, age, severity;
@@ -42,7 +35,6 @@ struct Patient {
         while (cur->next) cur = cur->next;
         cur->next = r;
     }
-
     void showRecords() {
         if (!history) { cout << "  No records.\n"; return; }
         Record* cur = history; int i = 1;
@@ -61,12 +53,10 @@ struct Patient {
         cout << (isEmergency ? RED "EMERGENCY\n" RESET : GREEN "REGULAR\n" RESET);
     }
 };
-
 // ---------- Heap Comparator (Max-Heap by severity) ----------
 struct Cmp {
     bool operator()(Patient* a, Patient* b) { return a->severity < b->severity; }
 };
-
 // ---------- Globals ----------
 vector<Patient*> db;
 priority_queue<Patient*, vector<Patient*>, Cmp> emergHeap;
@@ -77,7 +67,6 @@ Patient* findPatient(int id) {
     for (auto p : db) if (p->id == id) return p;
     return nullptr;
 }
-
 // ---------- 1. Register ----------
 void registerPatient() {
     string name, cond; int age, sev;
@@ -94,7 +83,6 @@ void registerPatient() {
     else                { regQueue.push(p);  totalR++; cout << GREEN  << "\n  >> REGULAR queue.\n"   << RESET; }
     p->print();
 }
-
 // ---------- 2. Serve Next ----------
 void serveNext() {
     cout << "\n--- Serve Next Patient ---\n";
@@ -106,7 +94,6 @@ void serveNext() {
     p->addRecord("Called for consultation");
     p->print();
 }
-
 // ---------- 3. Update Severity ----------
 void updateSeverity() {
     cout << "\n--- Update Severity ---\n";
@@ -119,7 +106,6 @@ void updateSeverity() {
     if (p->isEmergency) { emergHeap.push(p); cout << RED << "  Updated & pushed to emergency heap.\n" << RESET; }
     else cout << GREEN << "  Severity updated.\n" << RESET;
 }
-
 // ---------- 4. Add Record ----------
 void addRecord() {
     cout << "\n--- Add Treatment Record ---\n";
@@ -130,7 +116,6 @@ void addRecord() {
     p->addRecord(note);
     cout << GREEN << "  Record added.\n" << RESET;
 }
-
 // ---------- 5. View Records ----------
 void viewRecords() {
     cout << "\n--- Medical Records ---\n";
@@ -141,7 +126,6 @@ void viewRecords() {
     cout << "  -- Treatment History --\n";
     p->showRecords();
 }
-
 // ---------- 6. View Waiting ----------
 void viewWaiting() {
     cout << "\n--- Waiting Patients ---\n";
@@ -160,7 +144,6 @@ void viewWaiting() {
         cout << "  " << i++ << ". " << p->name << " | ID:" << p->id << " | " << p->condition << "\n";
     }
 }
-
 // ---------- 7. Statistics ----------
 void showStats() {
     cout << "\n--- Statistics ---\n";
@@ -170,7 +153,6 @@ void showStats() {
     cout << YELLOW << "  Total Served     : " << RESET << served << "\n";
     cout << CYAN   << "  Still Waiting    : " << RESET << (emergHeap.size() + regQueue.size()) << "\n";
 }
-
 // ---------- Main ----------
 int main() {
     cout << BOLD << CYAN;
@@ -178,7 +160,6 @@ int main() {
     cout << "    HOSPITAL PATIENT MANAGEMENT SYSTEM\n";
     cout << "    Emergency Triage & Record Keeper\n";
     cout << "  ==========================================\n" << RESET;
-
     // Sample patients
     auto load = [&](string name, int age, int sev, string cond) {
         Patient* p = new Patient(nextID++, name, age, sev, cond);
